@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Logs</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        h1 {
+            color: red;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #errorContainer {
+            flex: 1; /* Đẩy khung chiếm toàn bộ không gian còn lại */
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f8f9fa;
+            overflow-y: auto; /* Hiển thị thanh cuộn nếu lỗi quá nhiều */
+            padding: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+        #clearErrorsButton {
+            position: fixed;
+            bottom: 20px; /* Cách mép dưới 20px */
+            left: 20px;  /* Cách mép trái 20px */
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #clearErrorsButton:hover {
+            background: #0056b3;
+        }
+        #deviceName {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 30px; 
+            color: #000000;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Error Logs</h1>
+    <div class="info-box" id="deviceName">Device1</div>
+    <div id="errorContainer">
+        <ul id="errorList"></ul>
+    </div>
+    
+    <button id="clearErrorsButton">Clear All Errors</button>
+
+    <script>
+        // Lấy danh sách lỗi từ localStorage
+        const errorLogs = JSON.parse(localStorage.getItem("errorLogs")) || [];
+        const errorList = document.getElementById("errorList");
+
+        // Hiển thị danh sách lỗi trên giao diện
+        function renderErrors(errors) {
+            errorList.innerHTML = ""; // Xóa danh sách hiện tại
+            errors.slice().reverse().forEach((error) => { // Đảo ngược để lỗi mới nhất ở đầu
+                const listItem = document.createElement("li");
+                listItem.textContent = error;
+                errorList.appendChild(listItem);
+            });
+        }
+
+        // Hàm xóa toàn bộ lỗi
+        function clearErrors() {
+            localStorage.removeItem("errorLogs"); // Xóa dữ liệu trong localStorage
+            renderErrors([]); // Làm trống danh sách hiển thị
+        }
+
+        // Gắn sự kiện cho nút "Clear All Errors"
+        document.getElementById("clearErrorsButton").addEventListener("click", clearErrors);
+
+        // Lắng nghe sự kiện storage để cập nhật lỗi mới
+        window.addEventListener("storage", (event) => {
+            if (event.key === "errorLogs") {
+                const updatedErrors = JSON.parse(event.newValue) || [];
+                renderErrors(updatedErrors); // Cập nhật danh sách lỗi
+            }
+        });
+
+        // Hiển thị danh sách lỗi ban đầu
+        renderErrors(errorLogs);
+    </script>
+</body>
+</html>

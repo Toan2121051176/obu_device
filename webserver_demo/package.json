@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@google-cloud/translate": "^8.5.0",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "cros": "^1.0.1",
+    "cubic-spline": "^3.0.3",
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1",
+    "mqtt": "^5.10.3"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  }
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snap-to-Road</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 100vh; /* Full screen height */
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    'use strict';
+
+    // Initial map position
+    var startPosition = [21.036581264349586, 105.78279125943813];
+
+    // Initialize map
+    var map = L.map('map').setView(startPosition, 14).on('click', processMapClick);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.google.com/maps">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Groups for markers and polylines
+    var markersGroup = L.layerGroup().addTo(map);
+    var linesGroup = L.layerGroup().addTo(map);
+
+    // Buffer to store points
+    var bufferPoints = [];
+
+    // Handle OSRM response
+    function processOsrmReply(data) {
+      console.log('Received OSRM response:', data);
+
+      // Draw snapped red polylines
+      if (data.routes) {
+        var coordinates = data.routes[0].geometry.coordinates;
+        var latLngs = coordinates.map(coord => [coord[1], coord[0]]);
+        L.polyline(latLngs, { color: 'red', weight: 5 }).addTo(linesGroup);
+      }
+    }
+
+    // Send request to OSRM Snap-to-Road API
+    function sendOsrmRequest(lngLats) {
+      var url = 'https://router.project-osrm.org/route/v1/driving/' +
+        lngLats.join(';') +
+        '?overview=full' + // Full geometry
+        '&geometries=geojson';
+
+      console.log('Sending OSRM request to URL:', url);
+
+      fetch(url)
+        .then(response => {
+          if (!response.ok) throw new Error('Error: ' + response.status);
+          return response.json();
+        })
+        .then(data => processOsrmReply(data))
+        .catch(error => {
+          console.error(error);
+        });
+    }
+
+    // Handle map click event
+    function processMapClick(ev) {
+      // Add point to buffer
+      bufferPoints.push(ev.latlng);
+      L.marker(ev.latlng).addTo(markersGroup);
+
+      // Convert buffer points to OSRM format
+      var lngLats = bufferPoints.map(point =>
+        parseFloat(point.lng).toFixed(6) + ',' +
+        parseFloat(point.lat).toFixed(6)
+      );
+
+      // Send OSRM request when there are at least 2 points
+      if (bufferPoints.length >= 2) {
+        sendOsrmRequest(lngLats);
+
+        // Reset buffer points to the last point
+        bufferPoints = [bufferPoints[bufferPoints.length - 1]];
+      }
+    }
+  </script>
+</body>
+</html>

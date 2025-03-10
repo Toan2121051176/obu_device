@@ -1,0 +1,188 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Bố cục logo */
+.logo {
+    display: flex; /* Đặt logo và chữ trên cùng một hàng ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: start; /* Căn logo và chữ sang bên trái */
+}
+
+/* Hình ảnh logo */
+.logo img {
+    width: 50px; /* Kích thước logo (chiều rộng) */
+    height: auto; /* Chiều cao tự động theo tỉ lệ */
+    margin-right: 10px; /* Khoảng cách giữa logo và chữ */
+}
+
+/* Văn bản logo */
+.logo-text {
+    font-size: 24px; /* Kích thước chữ */
+    font-weight: bold; /* In đậm chữ */
+    color: #333; /* Màu chữ */
+    text-align: center; /* Căn giữa chữ trong chính nó */
+}
+
+
+.company-info {
+    position: fixed;
+    margin-top: 10px;
+    right: 10px; 
+}
+
+.company {
+    width: 150px; 
+    height: auto; 
+}
+
+
+
+.company-logo {
+    position: fixed;
+    right: 20px; 
+    width: 50px; /* Kích thước logo */
+    height: auto; /* Tự động điều chỉnh chiều cao theo tỷ lệ */
+}
+
+
+
+#map {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 70%;
+    height: 100%;
+    border: 5px solid #080404;
+}
+
+#unsubscribe {
+    margin-top: 20px;
+    padding: 30px;
+    font-size: 30px;
+    border: 1px solid #fd7878;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    margin-bottom: 20px; 
+    margin-right: 100px;
+    
+}
+
+#unsubscribe:hover {
+    background-color: #dcdcdc; 
+}
+
+#showErrors {
+    margin-top: 20px;
+    padding: 30px;
+    font-size: 30px;
+    border: 1px solid #fd7878;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    margin-bottom: 20px; 
+    margin-right: 100px;
+    
+}
+
+#showErrors:hover {
+    background-color: #dcdcdc; 
+}
+
+#unsubscribe:active {
+    background-color: #f5b1b1; /* Màu khi nhấn */
+    border-color: #fd7878; /* Giữ màu viền */
+}
+
+.form-row > label {
+    padding: 5em;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+#errorBanner {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 1000;
+    display: none; 
+}
+
+#info-container {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    width: 25%;
+}
+
+
+.info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px; 
+}
+
+
+.info-title {
+    flex: 0 0 100px; 
+    font-weight: bold;
+    color: #000000;
+    text-align: left;
+    margin-right: 10px;
+}
+
+
+.info-box {
+    flex: 1;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 30px; 
+    color: #000000;
+    text-align: left;
+}
+
+.error-box {
+    position: fixed; /* Đặt vị trí cố định */
+    bottom: 20px; /* Cách đáy trang 20px */
+    right: 20px; /* Cách cạnh phải trang 20px */
+    background-color: #7a7171; /* Màu nền đỏ */
+    color: white; /* Màu chữ trắng */
+    padding: 15px; /* Padding bên trong khung */
+    border-radius: 5px; /* Viền bo tròn */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng cho khung */
+    font-family: Arial, sans-serif;
+    font-size: 16px; /* Kích thước chữ mặc định */
+    width: 300px; /* Chiều rộng cố định cho khung */
+    max-height: 200px; /* Chiều cao tối đa của khung */
+    overflow-y: auto; /* Thêm thanh cuộn dọc khi nội dung quá dài */
+}
+
+.error-message {
+    background-color: #ff5733; /* Màu nền của mỗi ô lỗi */
+    margin-bottom: 10px; /* Khoảng cách giữa các ô lỗi */
+    padding: 10px; /* Khoảng cách trong mỗi ô */
+    border-radius: 5px; /* Viền bo tròn cho mỗi ô */
+    font-size: 14px; /* Kích thước chữ trong từng ô */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng cho mỗi ô */
+}
+

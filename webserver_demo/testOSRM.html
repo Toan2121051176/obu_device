@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSRM Map Matching Demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>OSRM Map Matching Demo</h1>
+    <p>Click on the map to set the start and end points. The route will be matched and displayed.</p>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([21.0285, 105.8542], 13); // Center on Hanoi, Vietnam
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        let startPoint = null;
+        let endPoint = null;
+        const markers = [];
+
+        // Function to add markers
+        function addMarker(latlng, label) {
+            const marker = L.marker(latlng).addTo(map).bindPopup(label).openPopup();
+            markers.push(marker);
+        }
+
+        // Function to clear markers and route
+        function clearMap() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers.length = 0;
+            startPoint = null;
+            endPoint = null;
+        }
+
+        // Function to find and display the matched route
+        async function findAndDisplayRoute() {
+            if (!startPoint || !endPoint) {
+                alert('Please select both start and end points.');
+                return;
+            }
+
+            const matchUrl = `http://router.project-osrm.org/match/v1/driving/${startPoint.lng},${startPoint.lat};${endPoint.lng},${endPoint.lat}?geometries=geojson`;
+            try {
+                const response = await fetch(matchUrl);
+                const data = await response.json();
+
+                if (data.code === 'Ok') {
+                    const coords = data.matchings[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+                    const polyline = L.polyline(coords, { color: 'green' }).addTo(map);
+
+                    map.fitBounds(polyline.getBounds());
+                } else {
+                    alert('Could not match route.');
+                }
+            } catch (error) {
+                console.error('Error with map matching:', error);
+            }
+        }
+
+        // Handle map click to set start and end points
+        map.on('click', (e) => {
+            const latlng = e.latlng;
+
+            if (!startPoint) {
+                startPoint = latlng;
+                addMarker(latlng, 'Start Point');
+            } else if (!endPoint) {
+                endPoint = latlng;
+                addMarker(latlng, 'End Point');
+                findAndDisplayRoute();
+            } else {
+                clearMap();
+                startPoint = latlng;
+                addMarker(latlng, 'Start Point');
+            }
+        });
+    </script>
+</body>
+</html>
