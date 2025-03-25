@@ -124,7 +124,7 @@ function removeAllPopups() {
 // 🚀 **Cập nhật quãng đường và vẽ đường**
 function updateMapWithCoordinates(lat, lng) {
     coordinatesArray.push([lat, lng]);
-
+ 
     if (!startPoint) {
         startPoint = { lat, lng };
         addMarker(startPoint, 'Start Point');
