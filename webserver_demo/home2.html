@@ -24,10 +24,10 @@
     // Initialize map
     var map = L.map('map').setView(startPosition, 14).on('click', processMapClick);
     
-    // Use Esri ArcGIS Basemap instead of OpenStreetMap
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-    }).addTo(map);
+    L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+  attribution: '&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+}).addTo(map);
+
 
     // Groups for markers and polylines
     var markersGroup = L.layerGroup().addTo(map);

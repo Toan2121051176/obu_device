@@ -13,9 +13,9 @@ const markers = [];
 
 function initMap() {
     map = L.map('map').setView([10.7769, 106.7009], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        attribution: '&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+      }).addTo(map);      
 }
 
 // 🚀 **Tìm kiếm thiết bị và hiển thị lên bản đồ**
