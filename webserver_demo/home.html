@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBU server</title>
+    <title>OBU server có data</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -30,20 +30,39 @@
         <div id="errorBanner">Error: Something went wrong!</div>
 
     </div>
-
     <div id="info-container">
-        <div class="search-box">
-            <input type="search" id="deviceName" placeholder="Nhập tên thiết bị...">
-            <button onclick="searchDevice()">🔍</button>
+     <!-- Tìm kiếm thiết bị -->
+     <div class="search-box">
+        <input type="search" id="deviceName" placeholder="Nhập tên thiết bị..." />
+        <button onclick="searchDevice()">🔍</button>
+    </div>
+
+    <!-- Chọn ngày -->
+    <div class="datePicker">
+        <label for="datePicker">Chọn ngày:</label>
+        <input type="date" id="datePicker">
+    </div>
+
+    <div id="info-section">
+        <div class="info-row">
+            <span class="info-title">Device:</span>
+            <div class="info-box" id="deviceName">Device1</div>
         </div>
-        <div id="device-info">
-            <p><strong>Tọa độ:</strong> <span id="coords"></span></p>
-            <p><strong>Đường:</strong> <span id="road"></span></p>
-            <p><strong>Chi phí:</strong> <span id="cost"></span> VND</p>
-            <p><strong>Tình trạng giao thông:</strong> <span id="traffic"></span></p>
+        <div class="info-row">
+            <span class="info-title">Coordinates:</span>
+            <div class="info-box" id="coordinatesDisplay">21.1234, 105.1234</div>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Cost:</span>
+            <div class="info-box" id="costDisplay">200 VND</div>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Distance:</span>
+            <div class="info-box" id="distanceDisplay">0 km</div>
+            <!-- <input id="Cost" type="text" value="0 VND" readonly /> -->
         </div>
     </div>
-    
+    </div>
     <div id="errorBox" class="error-box">
     </div>
     

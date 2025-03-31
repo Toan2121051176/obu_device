@@ -29,7 +29,7 @@ app.use(express.json());
 
 mqttClient.on("connect", () => {
     console.log("Connected to MQTT broker");
-    mqttClient.subscribe("testelcol", () => {
+    mqttClient.subscribe("elcomOBU/29V180060", () => {
         console.log("📌 Dữ liệu trước khi ghi vào file:", JSON.stringify(mqttData, null, 2));
 saveDataToFile(mqttData);
 

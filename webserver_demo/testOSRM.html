@@ -3,88 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSRM Map Matching Demo</title>
+    <title>OBU Server</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
-        #map {
-            width: 100%;
-            height: 600px;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        #map { height: 500px; }
+        .info-container { padding: 10px; }
+        
     </style>
 </head>
 <body>
-    <h1>OSRM Map Matching Demo</h1>
-    <p>Click on the map to set the start and end points. The route will be matched and displayed.</p>
+    <div class="elc-navbar">
+
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                  <a class="navbar-brand" href="/">
+                                        <img src="https://www.elcom.com.vn/assets/web/images/logo-menu.png" class="home" alt="Elcom logo">
+                                </a>
+                <div class="navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-150 mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link has-sub text-nowrap" href="javascript:">Về Elcom</a>
+                            <ul class="sub-menu">
+                                <li><a href="https://www.elcom.com.vn/gioi-thieu" title="Giới thiệu">Giới thiệu</a></li>
+                                <li><a href="https://www.elcom.com.vn/lich-su-hinh-thanh" title="Lịch sử hình thành">Lịch sử hình thành</a></li>
+                                <li><a href="https://www.elcom.com.vn/ban-lanh-dao" title="Ban lãnh đạo">Ban lãnh đạo</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link has-sub text-nowrap" href="javascript:">Sản phẩm</a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="https://www.elcom.com.vn/san-pham/cong-nghe" title="Công nghệ">Công nghệ</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.elcom.com.vn/san-pham/ai-vision" title="AI Vision">AI Vision</a></li>
+    
+    
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="https://www.elcom.com.vn/san-pham/smart-traffic" title="Giao thông thông minh">Giao thông thông minh</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-its" title="ITS">Hệ sinh thái giao thông thông minh</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-itmon" title="ITMON giám sát xử phạt">ITMON giám sát xử phạt</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-etc" title="ETC thu phí điện tử không dừng">Thu phí tự động</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-ewim" title="eWIM kiểm soát tải trọng xe">Kiểm soát tải trọng</a></li>
+                                       <!--  <li><a href="#" title="VTS">VTS</a></li> -->
+                                        
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="https://www.elcom.com.vn/san-pham/digital-transformation" title="Chuyển đổi số">Chuyển đổi số</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.elcom.com.vn/san-pham/intelligence-operation-systems" title="Trung tâm điều hành thông minh">Trung tâm điều hành thông minh</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/data-platform" title="Nền tảng dữ liệu dùng chung">Nền tảng dữ liệu dùng chung</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/public-safety-system" title="Giải pháp giám sát an ninh trật tự">Giải pháp giám sát an ninh trật tự</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="https://www.elcom.com.vn/san-pham/vien-thong" title="Viễn thông &amp; CNTT">Viễn thông &amp; CNTT</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.elcom.com.vn/san-pham/vrbt" title="VRBT">VRBT</a></li>
+    
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="https://www.elcom.com.vn/san-pham/an-ninh-quoc-phong" title="An ninh quốc phòng">An ninh quốc phòng</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.elcom.com.vn/san-pham/skyeye" title="SkyEye">SkyEye – Hệ thống giám sát thông tin liên lạc vệ tinh</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/eyesea" title="EyeSea">EyeSea – Hệ thống giám sát tàu thuyền</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/truyen-dan-thong-tin-lien-lac" title="Truyền dẫn, thông tin liên lạc">Truyền dẫn, thông tin liên lạc</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/an-toan-thong-tin-giam-sat-mang" title="An toàn thông tin, giám sát mạng">An toàn thông tin, giám sát mạng</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/san-pham-chuyen-dung-an-ninh-quoc-phong" title="Sản phẩm chuyên dụng an ninh quốc phòng">Sản phẩm chuyên dụng an ninh quốc phòng</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="https://www.elcom.com.vn/san-pham/dich-vu-truc-tuyen" title="Dịch vụ trực tuyến">Dịch vụ trực tuyến</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="https://www.elcom.com.vn/san-pham/colearn" title="CoLearn">CoLearn</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/1sk" title="1SK">1SK</a></li>
+                                        <li><a href="https://www.elcom.com.vn/san-pham/vas" title="VAS">VAS</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- tin tức -->
+                        <li class="nav-item">
+                            <a class="nav-link text-nowrap" href="https://www.elcom.com.vn/tin-tuc" title="Tin tức">Tin tức</a>
+                            
+                        </li>
+                        <!-- tuyển dụng -->
+                        <li class="nav-item">
+                            <!-- <a class="nav-link has-sub" href="https://www.elcom.com.vn/tuyen-dung" title="Tuyển dụng">Tuyển dụng</a> -->
+                            <a class="nav-link has-sub text-nowrap" href="javascript:" title="Tuyển dụng">Tuyển dụng</a>
+                            <ul class="sub-menu">
+                                <li><a href="https://www.elcom.com.vn/tuyen-dung" title="Tìm kiếm cơ hội">Tìm kiếm cơ hội</a></li>
+                                <li><a href="https://www.elcom.com.vn/tuyen-dung/van-hoa-doanh-nghiep" title="Văn hóa doanh nghiệp">Văn hóa doanh nghiệp</a></li>
+                               <!--  <li><a href="https://www.elcom.com.vn/tuyen-dung/cau-hoi-thuong-gap" title="Câu hỏi thường gặp">Câu hỏi thường gặp</a></li>
+                                <li><a href="https://www.elcom.com.vn/tuyen-dung/quy-trinh-tuyen-dung" title="Quy trình tuyển dụng">Quy trình tuyển dụng</a></li> -->
+                            </ul>
+                        </li>
+                        <!-- cổ đông -->
+                        <li class="nav-item">
+                            <a class="nav-link has-sub text-nowrap" href="https://www.elcom.com.vn/co-dong/phieu-thong-tin" title="Cổ đông">Cổ đông</a>
+                            <ul class="sub-menu">
+                                <li><a href="https://www.elcom.com.vn/co-dong/phieu-thong-tin" title="Công bố thông tin">Công bố thông tin</a></li>
+                                <li><a href="https://www.elcom.com.vn/co-dong/bao-cao-tai-chinh" title="Báo cáo tài chính">Báo cáo tài chính</a></li>
+                                <li><a href="https://www.elcom.com.vn/co-dong/bao-cao-thuong-nien" title="Báo cáo thường niên">Báo cáo thường niên</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="d-flex elc-navbar-icon ml-auto align-items-center">
+                                                <li class="login-btn">
+                                
+                                <a class="nav-link login" href="#" data-toggle="modal" data-target="#modal-login" title="Đăng nhập">
+                                    <img src="https://www.elcom.com.vn/assets/web/icons/icon-login.png" alt="login google icon" class="pointer img-login">
+                                    Đăng nhập
+                                </a>
+                                <a class="nav-link login-scroll" href="#" data-toggle="modal" data-target="#modal-login" title="Đăng nhập">
+                                    <img src="https://www.elcom.com.vn/assets/web/icons/icon-login-scroll.png" alt="login google icon" class="pointer img-login">
+                                    Đăng nhập
+                                </a>
+                            </li>
+                                            <li class="pb-1"><img src="https://www.elcom.com.vn/assets/web/icons/search-black.png" alt="menu search icon" class="pointer" style="display: none"></li>
+    
+                        <li class="pb-1">
+                            <a href="https://www.elcom.com.vn/change-language/vi">
+                                <img src="https://www.elcom.com.vn/assets/web/icons/co-vn-menu-icon.png" alt="co-vn-menu-icon" class="cross-icon">
+                            </a>
+                        </li>
+                        <li class="pb-1">
+                            <a href="https://www.elcom.com.vn/change-language/en">
+                                <img src="https://www.elcom.com.vn/assets/web/icons/co-eng-menu-icon.png" alt="co-eng-menu-icon" class="cross-icon">
+                            </a>
+                        </li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                    </ul>
+                </div>
+                <div class="menu-icon-mobile">
+                    <img src="https://www.elcom.com.vn/assets/web/icons/menu-open-white.png" alt="menu open icon" class="pointer">
+                </div>
+            </nav>
+        </div>
+    </div>
+    <h1>OBU Server - Giám sát hành trình</h1>
     <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <div class="info-container">
+        <input type="search" id="deviceName" placeholder="Nhập tên thiết bị...">
+        <button onclick="searchDevice()">🔍</button>
+        <p><strong>Tọa độ:</strong> <span id="coords"></span></p>
+        <p><strong>Chi phí:</strong> <span id="cost"></span> VND</p>
+    </div>
+    
     <script>
-        // Initialize the map
-        const map = L.map('map').setView([21.0285, 105.8542], 13); // Center on Hanoi, Vietnam
-
-        // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        var map = L.map('map').setView([21.0285, 105.8542], 12);
+        L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            attribution: '&copy; Google Maps'
         }).addTo(map);
+        
+        var markers = {};
+        var paths = {};
 
-        let startPoint = null;
-        let endPoint = null;
-        const markers = [];
-
-        // Function to add markers
-        function addMarker(latlng, label) {
-            const marker = L.marker(latlng).addTo(map).bindPopup(label).openPopup();
-            markers.push(marker);
-        }
-
-        // Function to clear markers and route
-        function clearMap() {
-            markers.forEach(marker => map.removeLayer(marker));
-            markers.length = 0;
-            startPoint = null;
-            endPoint = null;
-        }
-
-        // Function to find and display the matched route
-        async function findAndDisplayRoute() {
-            if (!startPoint || !endPoint) {
-                alert('Please select both start and end points.');
-                return;
+        function updateMarker(lat, lng, deviceName) {
+            if (!markers[deviceName]) {
+                markers[deviceName] = L.marker([lat, lng]).addTo(map)
+                    .bindPopup("Thiết bị: " + deviceName);
+                paths[deviceName] = L.polyline([], { color: 'blue' }).addTo(map);
             }
-
-            const matchUrl = `http://router.project-osrm.org/match/v1/driving/${startPoint.lng},${startPoint.lat};${endPoint.lng},${endPoint.lat}?geometries=geojson`;
-            try {
-                const response = await fetch(matchUrl);
-                const data = await response.json();
-
-                if (data.code === 'Ok') {
-                    const coords = data.matchings[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
-                    const polyline = L.polyline(coords, { color: 'green' }).addTo(map);
-
-                    map.fitBounds(polyline.getBounds());
-                } else {
-                    alert('Could not match route.');
-                }
-            } catch (error) {
-                console.error('Error with map matching:', error);
-            }
+            markers[deviceName].setLatLng([lat, lng]).openPopup();
+            paths[deviceName].addLatLng([lat, lng]);
+            document.getElementById("coords").innerText = lat + ", " + lng;
         }
-
-        // Handle map click to set start and end points
-        map.on('click', (e) => {
-            const latlng = e.latlng;
-
-            if (!startPoint) {
-                startPoint = latlng;
-                addMarker(latlng, 'Start Point');
-            } else if (!endPoint) {
-                endPoint = latlng;
-                addMarker(latlng, 'End Point');
-                findAndDisplayRoute();
+        
+        function searchDevice() {
+            var inputName = document.getElementById("deviceName").value.trim();
+            if (markers[inputName]) {
+                map.setView(markers[inputName].getLatLng(), 15);
+                markers[inputName].openPopup();
             } else {
-                clearMap();
-                startPoint = latlng;
-                addMarker(latlng, 'Start Point');
+                alert("Không tìm thấy thiết bị!");
+            }
+        }
+        
+        const client = mqtt.connect("wss://test.mosquitto.org:8081");
+
+        client.on("connect", function () {
+            console.log("Đã kết nối MQTT");
+            client.subscribe("elcom/obu/#");
+        });
+
+        client.on("message", function (topic, message) {
+            try {
+                let data = JSON.parse(message.toString());
+                let deviceName = data.device;
+                let lat = data.lat;
+                let lng = data.lng;
+                updateMarker(lat, lng, deviceName);
+            } catch (error) {
+                console.error("Lỗi xử lý dữ liệu MQTT:", error);
             }
         });
     </script>

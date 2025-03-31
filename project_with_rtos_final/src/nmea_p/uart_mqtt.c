@@ -103,7 +103,7 @@ fsp_err_t pub_mess(const char *message) {
     delayms(100);
 
     send_uart_command("AT+CMQTTTOPIC=0,9\r\n", 200);
-    send_uart_command("testelcol", 200);
+    send_uart_command("elcomOBU/80060", 200);
 
     fsp_err_t status;
     char payload_command[22];
