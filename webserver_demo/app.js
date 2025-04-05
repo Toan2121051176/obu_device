@@ -261,4 +261,3 @@ function searchDevice() {
     const deviceName = document.getElementById("deviceName").value;
     alert("Tìm kiếm thiết bị: " + deviceName);
 }
-

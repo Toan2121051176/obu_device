@@ -1,220 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBU Server</title>
+    <title>OBU Server - Theo dõi vị trí</title>
+    
+    <!-- Thư viện Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <style>
+
+    <!-- Thư viện Routing Machine (Tìm đường) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        #map { height: 500px; }
-        .info-container { padding: 10px; }
-        
+        #map { height: 500px; width: 100%; }
+        .control-container { padding: 10px; }
+        .logo {
+    display: flex; /* Đặt logo và chữ trên cùng một hàng ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: start; /* Căn logo và chữ sang bên trái */
+}
+
+/* Hình ảnh logo */
+.logo img {
+    width: 50px; /* Kích thước logo (chiều rộng) */
+    height: auto; /* Chiều cao tự động theo tỉ lệ */
+    margin-right: 10px; /* Khoảng cách giữa logo và chữ */
+}
+
+/* Văn bản logo */
+.logo-text {
+    font-size: 24px; /* Kích thước chữ */
+    font-weight: bold; /* In đậm chữ */
+    color: #333; /* Màu chữ */
+    text-align: center; /* Căn giữa chữ trong chính nó */
+}
+
+
+.company-info {
+    position: fixed;
+    margin-top: 10px;
+    right: 10px; 
+}
+
+.company {
+    width: 150px; 
+    height: auto; 
+}
+
+
+
+.company-logo {
+    position: fixed;
+    right: 20px; 
+    width: 50px; /* Kích thước logo */
+    height: auto; /* Tự động điều chỉnh chiều cao theo tỷ lệ */
+}
+
+
     </style>
 </head>
 <body>
-    <div class="elc-navbar">
+    
 
-        <div class="container">
-            <nav class="navbar navbar-expand-lg">
-                  <a class="navbar-brand" href="/">
-                                        <img src="https://www.elcom.com.vn/assets/web/images/logo-menu.png" class="home" alt="Elcom logo">
-                                </a>
-                <div class="navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-150 mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link has-sub text-nowrap" href="javascript:">Về Elcom</a>
-                            <ul class="sub-menu">
-                                <li><a href="https://www.elcom.com.vn/gioi-thieu" title="Giới thiệu">Giới thiệu</a></li>
-                                <li><a href="https://www.elcom.com.vn/lich-su-hinh-thanh" title="Lịch sử hình thành">Lịch sử hình thành</a></li>
-                                <li><a href="https://www.elcom.com.vn/ban-lanh-dao" title="Ban lãnh đạo">Ban lãnh đạo</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link has-sub text-nowrap" href="javascript:">Sản phẩm</a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="https://www.elcom.com.vn/san-pham/cong-nghe" title="Công nghệ">Công nghệ</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="https://www.elcom.com.vn/san-pham/ai-vision" title="AI Vision">AI Vision</a></li>
-    
-    
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="https://www.elcom.com.vn/san-pham/smart-traffic" title="Giao thông thông minh">Giao thông thông minh</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-its" title="ITS">Hệ sinh thái giao thông thông minh</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-itmon" title="ITMON giám sát xử phạt">ITMON giám sát xử phạt</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-etc" title="ETC thu phí điện tử không dừng">Thu phí tự động</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/smart-traffic-ewim" title="eWIM kiểm soát tải trọng xe">Kiểm soát tải trọng</a></li>
-                                       <!--  <li><a href="#" title="VTS">VTS</a></li> -->
-                                        
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="https://www.elcom.com.vn/san-pham/digital-transformation" title="Chuyển đổi số">Chuyển đổi số</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="https://www.elcom.com.vn/san-pham/intelligence-operation-systems" title="Trung tâm điều hành thông minh">Trung tâm điều hành thông minh</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/data-platform" title="Nền tảng dữ liệu dùng chung">Nền tảng dữ liệu dùng chung</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/public-safety-system" title="Giải pháp giám sát an ninh trật tự">Giải pháp giám sát an ninh trật tự</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="https://www.elcom.com.vn/san-pham/vien-thong" title="Viễn thông &amp; CNTT">Viễn thông &amp; CNTT</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="https://www.elcom.com.vn/san-pham/vrbt" title="VRBT">VRBT</a></li>
-    
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="https://www.elcom.com.vn/san-pham/an-ninh-quoc-phong" title="An ninh quốc phòng">An ninh quốc phòng</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="https://www.elcom.com.vn/san-pham/skyeye" title="SkyEye">SkyEye – Hệ thống giám sát thông tin liên lạc vệ tinh</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/eyesea" title="EyeSea">EyeSea – Hệ thống giám sát tàu thuyền</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/truyen-dan-thong-tin-lien-lac" title="Truyền dẫn, thông tin liên lạc">Truyền dẫn, thông tin liên lạc</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/an-toan-thong-tin-giam-sat-mang" title="An toàn thông tin, giám sát mạng">An toàn thông tin, giám sát mạng</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/san-pham-chuyen-dung-an-ninh-quoc-phong" title="Sản phẩm chuyên dụng an ninh quốc phòng">Sản phẩm chuyên dụng an ninh quốc phòng</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="https://www.elcom.com.vn/san-pham/dich-vu-truc-tuyen" title="Dịch vụ trực tuyến">Dịch vụ trực tuyến</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="https://www.elcom.com.vn/san-pham/colearn" title="CoLearn">CoLearn</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/1sk" title="1SK">1SK</a></li>
-                                        <li><a href="https://www.elcom.com.vn/san-pham/vas" title="VAS">VAS</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- tin tức -->
-                        <li class="nav-item">
-                            <a class="nav-link text-nowrap" href="https://www.elcom.com.vn/tin-tuc" title="Tin tức">Tin tức</a>
-                            
-                        </li>
-                        <!-- tuyển dụng -->
-                        <li class="nav-item">
-                            <!-- <a class="nav-link has-sub" href="https://www.elcom.com.vn/tuyen-dung" title="Tuyển dụng">Tuyển dụng</a> -->
-                            <a class="nav-link has-sub text-nowrap" href="javascript:" title="Tuyển dụng">Tuyển dụng</a>
-                            <ul class="sub-menu">
-                                <li><a href="https://www.elcom.com.vn/tuyen-dung" title="Tìm kiếm cơ hội">Tìm kiếm cơ hội</a></li>
-                                <li><a href="https://www.elcom.com.vn/tuyen-dung/van-hoa-doanh-nghiep" title="Văn hóa doanh nghiệp">Văn hóa doanh nghiệp</a></li>
-                               <!--  <li><a href="https://www.elcom.com.vn/tuyen-dung/cau-hoi-thuong-gap" title="Câu hỏi thường gặp">Câu hỏi thường gặp</a></li>
-                                <li><a href="https://www.elcom.com.vn/tuyen-dung/quy-trinh-tuyen-dung" title="Quy trình tuyển dụng">Quy trình tuyển dụng</a></li> -->
-                            </ul>
-                        </li>
-                        <!-- cổ đông -->
-                        <li class="nav-item">
-                            <a class="nav-link has-sub text-nowrap" href="https://www.elcom.com.vn/co-dong/phieu-thong-tin" title="Cổ đông">Cổ đông</a>
-                            <ul class="sub-menu">
-                                <li><a href="https://www.elcom.com.vn/co-dong/phieu-thong-tin" title="Công bố thông tin">Công bố thông tin</a></li>
-                                <li><a href="https://www.elcom.com.vn/co-dong/bao-cao-tai-chinh" title="Báo cáo tài chính">Báo cáo tài chính</a></li>
-                                <li><a href="https://www.elcom.com.vn/co-dong/bao-cao-thuong-nien" title="Báo cáo thường niên">Báo cáo thường niên</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="d-flex elc-navbar-icon ml-auto align-items-center">
-                                                <li class="login-btn">
-                                
-                                <a class="nav-link login" href="#" data-toggle="modal" data-target="#modal-login" title="Đăng nhập">
-                                    <img src="https://www.elcom.com.vn/assets/web/icons/icon-login.png" alt="login google icon" class="pointer img-login">
-                                    Đăng nhập
-                                </a>
-                                <a class="nav-link login-scroll" href="#" data-toggle="modal" data-target="#modal-login" title="Đăng nhập">
-                                    <img src="https://www.elcom.com.vn/assets/web/icons/icon-login-scroll.png" alt="login google icon" class="pointer img-login">
-                                    Đăng nhập
-                                </a>
-                            </li>
-                                            <li class="pb-1"><img src="https://www.elcom.com.vn/assets/web/icons/search-black.png" alt="menu search icon" class="pointer" style="display: none"></li>
-    
-                        <li class="pb-1">
-                            <a href="https://www.elcom.com.vn/change-language/vi">
-                                <img src="https://www.elcom.com.vn/assets/web/icons/co-vn-menu-icon.png" alt="co-vn-menu-icon" class="cross-icon">
-                            </a>
-                        </li>
-                        <li class="pb-1">
-                            <a href="https://www.elcom.com.vn/change-language/en">
-                                <img src="https://www.elcom.com.vn/assets/web/icons/co-eng-menu-icon.png" alt="co-eng-menu-icon" class="cross-icon">
-                            </a>
-                        </li>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-                    </ul>
-                </div>
-                <div class="menu-icon-mobile">
-                    <img src="https://www.elcom.com.vn/assets/web/icons/menu-open-white.png" alt="menu open icon" class="pointer">
-                </div>
-            </nav>
-        </div>
-    </div>
-    <h1>OBU Server - Giám sát hành trình</h1>
+    <h2>Bản đồ tìm đường & theo dõi vị trí</h2>
+    <input type="text" id="start" placeholder="Nhập điểm bắt đầu (tọa độ)">
+    <input type="text" id="end" placeholder="Nhập điểm đến (tọa độ)">
+    <button onclick="calculateRoute()">Tìm đường</button>
     <div id="map"></div>
-    <div class="info-container">
-        <input type="search" id="deviceName" placeholder="Nhập tên thiết bị...">
-        <button onclick="searchDevice()">🔍</button>
-        <p><strong>Tọa độ:</strong> <span id="coords"></span></p>
-        <p><strong>Chi phí:</strong> <span id="cost"></span> VND</p>
-    </div>
-    
+
     <script>
-        var map = L.map('map').setView([21.0285, 105.8542], 12);
-        L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-            attribution: '&copy; Google Maps'
-        }).addTo(map);
-        
-        var markers = {};
-        var paths = {};
+        let map, routingControl, deviceMarker;
 
-        function updateMarker(lat, lng, deviceName) {
-            if (!markers[deviceName]) {
-                markers[deviceName] = L.marker([lat, lng]).addTo(map)
-                    .bindPopup("Thiết bị: " + deviceName);
-                paths[deviceName] = L.polyline([], { color: 'blue' }).addTo(map);
-            }
-            markers[deviceName].setLatLng([lat, lng]).openPopup();
-            paths[deviceName].addLatLng([lat, lng]);
-            document.getElementById("coords").innerText = lat + ", " + lng;
+        function initMap() {
+            // Tạo bản đồ Leaflet
+            map = L.map("map").setView([21.030034, 105.782190], 13);
+            
+
+
+            // Thêm lớp bản đồ Google Maps (Vệ tinh & giao thông)
+            L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&scale=20', {
+                attribution: '&copy; Google Maps'
+            }).addTo(map);
+
+            L.tileLayer('https://mt1.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}&scale=20', {
+                attribution: '&copy; Google Maps'
+            }).addTo(map);
+
+            // Gọi hàm theo dõi vị trí thiết bị
+            trackDeviceLocation();
         }
-        
-        function searchDevice() {
-            var inputName = document.getElementById("deviceName").value.trim();
-            if (markers[inputName]) {
-                map.setView(markers[inputName].getLatLng(), 15);
-                markers[inputName].openPopup();
+
+        function calculateRoute() {
+            const start = document.getElementById("start").value.split(",");
+            const end = document.getElementById("end").value.split(",");
+
+            if (start.length !== 2 || end.length !== 2) {
+                alert("Vui lòng nhập tọa độ hợp lệ! (Ví dụ: 10.7769,106.7009)");
+                return;
+            }
+
+            const startLatLng = L.latLng(parseFloat(start[0]), parseFloat(start[1]));
+            const endLatLng = L.latLng(parseFloat(end[0]), parseFloat(end[1]));
+
+            // Xóa tuyến đường cũ nếu có
+            if (routingControl) {
+                map.removeControl(routingControl);
+            }
+
+            // Thêm tuyến đường mới
+            routingControl = L.Routing.control({
+                waypoints: [startLatLng, endLatLng],
+                routeWhileDragging: true
+            }).addTo(map);
+        }
+
+        function trackDeviceLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(position => {
+                    const userLocation = [position.coords.latitude, position.coords.longitude];
+
+                    if (!deviceMarker) {
+                        deviceMarker = L.marker(userLocation, {
+                            icon: L.icon({
+                                iconUrl: "https://maps.google.com/mapfiles/kml/shapes/man.png",
+                                iconSize: [40, 40]
+                            })
+                        }).addTo(map);
+                    } else {
+                        deviceMarker.setLatLng(userLocation);
+                    }
+
+                    map.setView(userLocation, 15);
+                }, error => {
+                    console.error("Lỗi lấy vị trí thiết bị:", error);
+                });
             } else {
-                alert("Không tìm thấy thiết bị!");
+                alert("Trình duyệt không hỗ trợ lấy vị trí!");
             }
         }
+
+        window.onload = initMap;
+
+
         
-        const client = mqtt.connect("wss://test.mosquitto.org:8081");
-
-        client.on("connect", function () {
-            console.log("Đã kết nối MQTT");
-            client.subscribe("elcom/obu/#");
-        });
-
-        client.on("message", function (topic, message) {
-            try {
-                let data = JSON.parse(message.toString());
-                let deviceName = data.device;
-                let lat = data.lat;
-                let lng = data.lng;
-                updateMarker(lat, lng, deviceName);
-            } catch (error) {
-                console.error("Lỗi xử lý dữ liệu MQTT:", error);
-            }
-        });
     </script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+
 </body>
 </html>
