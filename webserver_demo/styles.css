@@ -6,27 +6,6 @@ body {
     height: 100vh;
 }
 
-/* Bố cục logo */
-.logo {
-    display: flex; /* Đặt logo và chữ trên cùng một hàng ngang */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: start; /* Căn logo và chữ sang bên trái */
-}
-
-/* Hình ảnh logo */
-.logo img {
-    width: 50px; /* Kích thước logo (chiều rộng) */
-    height: auto; /* Chiều cao tự động theo tỉ lệ */
-    margin-right: 10px; /* Khoảng cách giữa logo và chữ */
-}
-
-/* Văn bản logo */
-.logo-text {
-    font-size: 24px; /* Kích thước chữ */
-    font-weight: bold; /* In đậm chữ */
-    color: #333; /* Màu chữ */
-    text-align: center; /* Căn giữa chữ trong chính nó */
-}
 
 
 .company-info {
@@ -218,3 +197,56 @@ body {
             z-index: 1000;
             display: none; 
         }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: blue;
+            padding: 10px 20px;
+            color: white;
+        }
+        
+        .nav-left, .nav-center, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo img {
+            height: 40px;
+        }
+        
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .nav-list {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-list li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-list li a:hover {
+            color: #FFD700; /* vàng nhạt khi hover */
+        }
+        
+        .company-info img.company {
+            height: 40px;
+        }
+        
