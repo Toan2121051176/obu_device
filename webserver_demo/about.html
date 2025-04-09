@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* RESET & CHUNG */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #f7f9fa);
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* ===============================
+   THANH ĐIỀU HƯỚNG (NAVBAR)
+=============================== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  padding: 12px 30px;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .logo img {
+  height: 42px;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  font-size: 16px;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-list li a:hover {
+  color: #ffe066;
+}
+
+.company-info img.company {
+  height: 42px;
+}
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.main-header {
+  background: linear-gradient(to right, #004080, #0066cc);
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.main-header h1 {
+  font-size: 2.5rem;
+}
+
+.main-header p {
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+/* Section */
+.section {
+  margin: 40px 0;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #004080;
+}
+
+.section p {
+  margin-bottom: 15px;
+}
+
+/* Highlight section (mission) */
+.highlight {
+  background-color: #e6f2ff;
+  padding: 20px;
+  border-left: 6px solid #005bbb;
+  border-radius: 6px;
+}
+
+/* Core values grid */
+.core-values .values-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.value-box {
+  flex: 1 1 calc(50% - 20px);
+  background: #ffffff;
+  padding: 20px;
+  border-left: 5px solid #004080;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.value-box:hover {
+  transform: translateY(-5px);
+}
+
+.value-box h3 {
+  color: #0056b3;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+.elc-footer {
+  background-color: #001f4e;
+  color: #fff;
+  padding: 40px 20px 20px;
+  font-size: 14px;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  gap: 40px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 30px;
+}
+
+.footer-logo {
+  flex: 1 1 300px;
+}
+
+.footer-logo img {
+  height: 40px;
+  margin-bottom: 15px;
+}
+
+.footer-columns {
+  display: flex;
+  flex: 3 1 600px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex: 1 1 180px;
+}
+
+.column h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.column ul li {
+  margin: 6px 0;
+}
+
+.column ul li a {
+  color: #ffffffcc;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.column ul li a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-icons {
+  margin-top: 10px;
+}
+
+.social-icons a {
+  margin: 0 8px;
+  display: inline-block;
+}
+
+.social-icons img {
+  height: 24px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.2s;
+}
+
+.social-icons img:hover {
+  transform: scale(1.1);
+}
+
+ </style>
+</head>
+<body>
+    <!-- Thanh điều hướng -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="icon/logo.png" alt="Logo"> 
+                <span class="logo-text">OBU SERVER</span>
+            </div>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-list">
+                <li><a href="home.html">🏠 Home</a></li>
+                <li><a href="tax.html">💰 Thuế</a></li>
+                <li><a href="about.html">ℹ️ Giới thiệu</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="company-info">
+                <img src="icon/company.png" alt="Company" class="company">
+            </div>
+        </div>
+    </nav>
+    <header class="main-header">
+        <div class="container">
+          <h1>ELCOM - Hành trình công nghệ & sáng tạo</h1>
+          <p>Kiến tạo cuộc sống tốt đẹp hơn bằng công nghệ</p>
+        </div>
+      </header>
+    
+      <main class="container">
+        <!-- Câu chuyện ELCOM -->
+        <section class="section">
+          <h2>Câu chuyện ELCOM</h2>
+          <div class="content">
+            <p>
+              Được thành lập từ năm 1995, ELCOM là một trong những doanh nghiệp dẫn đầu trong lĩnh vực công nghệ thông tin và viễn thông tại Việt Nam. Trải qua hơn 25 năm hình thành và phát triển, ELCOM đã vươn mình trở thành đối tác uy tín của nhiều tập đoàn công nghệ lớn trong và ngoài nước.
+            </p>
+            <p>
+              Với đội ngũ nhân sự giỏi, sáng tạo, ELCOM tiên phong trong việc cung cấp các giải pháp công nghệ có độ phức tạp cao, ứng dụng trong nhiều lĩnh vực quan trọng: viễn thông, an ninh quốc phòng, giao thông, giáo dục, y tế...
+            </p>
+            <p>
+              Sản phẩm, dịch vụ “Made by ELCOM” đã ghi dấu tại hơn 20 quốc gia. Đây là minh chứng cho khả năng làm chủ công nghệ, đưa thương hiệu Việt ra thế giới.
+            </p>
+          </div>
+        </section>
+    
+        <!-- Sứ mệnh -->
+        <section class="section highlight">
+          <h2>Sứ mệnh</h2>
+          <p>
+            ELCOM hướng đến việc lấy con người làm trung tâm, công nghệ làm phương tiện để phục vụ cộng đồng. Chúng tôi không ngừng đổi mới sáng tạo để kiến tạo những giải pháp công nghệ thông minh, phục vụ đời sống tốt đẹp hơn.
+          </p>
+        </section>
+    
+        <!-- Tầm nhìn -->
+        <section class="section">
+          <h2>Tầm nhìn</h2>
+          <p>
+            Trở thành tập đoàn công nghệ hàng đầu tại Việt Nam và khu vực, là nơi quy tụ những con người tài năng cùng chung chí hướng phát triển các giải pháp công nghệ tiên phong phục vụ xã hội.
+          </p>
+        </section>
+    
+        <!-- Giá trị cốt lõi -->
+        <section class="section core-values">
+          <h2>Giá trị cốt lõi</h2>
+          <div class="values-grid">
+            <div class="value-box">
+              <h3>Chủ động</h3>
+              <p>Luôn sẵn sàng hành động, đi trước một bước để đáp ứng hiệu quả mọi yêu cầu của khách hàng và nội bộ.</p>
+            </div>
+            <div class="value-box">
+              <h3>Sáng tạo</h3>
+              <p>Không ngừng đổi mới trong tư duy và cách làm để tạo ra giải pháp công nghệ đột phá, phục vụ con người.</p>
+            </div>
+            <div class="value-box">
+              <h3>Kỷ luật</h3>
+              <p>Tuân thủ quy định, cam kết với khách hàng và tôn trọng chuẩn mực nghề nghiệp.</p>
+            </div>
+            <div class="value-box">
+              <h3>Tử tế</h3>
+              <p>Hành xử nhân văn, tạo ra giá trị bền vững cho cộng đồng, khách hàng và chính mình.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    
+      <footer class="elc-footer">
+        <div class="footer-top">
+          <div class="footer-logo">
+            <img src="icon/company.png" alt="ELCOM Logo" />
+            <p><strong>CÔNG TY CỔ PHẦN CÔNG NGHỆ - VIỄN THÔNG ELCOM</strong></p>
+            <p>Trụ sở: Tòa nhà ELCOM, Phố Duy Tân, Cầu Giấy, Hà Nội</p>
+            <p>ĐT: +84 2438 359 359 | FAX: +84 24 38 355 884</p>
+            <p>Email: contact@elcom.com.vn</p>
+          </div>
+      
+          <div class="footer-columns">
+            <div class="column">
+              <h4>VỀ ELCOM</h4>
+              <ul>
+                <li><a href="#">Giới thiệu</a></li>
+                <li><a href="#">Lịch sử</a></li>
+                <li><a href="#">Ban lãnh đạo</a></li>
+                <li><a href="#">Chính sách bảo mật</a></li>
+              </ul>
+            </div>
+      
+            <div class="column">
+              <h4>SẢN PHẨM</h4>
+              <ul>
+                <li><a href="#">Công nghệ</a></li>
+                <li><a href="#">Giao thông thông minh</a></li>
+                <li><a href="#">An ninh quốc phòng</a></li>
+                <li><a href="#">Viễn thông & CNTT</a></li>
+                <li><a href="#">Dịch vụ trực tuyến</a></li>
+              </ul>
+            </div>
+      
+            <div class="column">
+              <h4>TIN TỨC</h4>
+              <ul>
+                <li><a href="#">Bản tin Elcom</a></li>
+                <li><a href="#">Elcom trên báo đài</a></li>
+                <li><a href="#">Blog</a></li>
+              </ul>
+            </div>
+      
+            <div class="column">
+              <h4>TUYỂN DỤNG</h4>
+              <ul>
+                <li><a href="#">Tìm kiếm cơ hội</a></li>
+                <li><a href="#">Văn hóa doanh nghiệp</a></li>
+              </ul>
+      
+              <h4>CỔ ĐÔNG</h4>
+              <ul>
+                <li><a href="#">Thông tin cổ đông</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      
+        <div class="footer-bottom">
+          <p>Giấy chứng nhận ĐKKD số 0101435127 do Sở KHĐT TP Hà Nội cấp.</p>
+          <div class="social-icons">
+            <a href="https://www.facebook.com/ElcomCorporationVN"><img src="icon/facebook-logo-2428.svg" alt="Facebook" /></a>
+            <a href="https://www.linkedin.com/company/elcom.com"><i class="fa-brands fa-facebook" style="color: #74C0FC;">Facebook</i></a>
+            <a href="https://www.youtube.com/@elcomcorporation"><i class="fa-brands fa-youtube" style="color: #f00a0a;">Youtube</i></a>
+          </div>
+        </div>
+      </footer>
+      
+</body>
+</html>

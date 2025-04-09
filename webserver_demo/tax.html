@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* RESET & CHUNG */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #f7f9fa);
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* ===============================
+   THANH ĐIỀU HƯỚNG (NAVBAR)
+=============================== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  padding: 12px 30px;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .logo img {
+  height: 42px;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  font-size: 16px;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-list li a:hover {
+  color: #ffe066;
+}
+
+.company-info img.company {
+  height: 42px;
+}
+    </style>
+</head>
+<body>
+    <!-- Thanh điều hướng -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="icon/logo.png" alt="Logo"> 
+                <span class="logo-text">OBU SERVER</span>
+            </div>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-list">
+                <li><a href="home.html">🏠 Home</a></li>
+                <li><a href="tax.html">💰 Thuế</a></li>
+                <li><a href="about.html">ℹ️ Giới thiệu</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="company-info">
+                <img src="icon/company.png" alt="Company" class="company">
+            </div>
+        </div>
+    </nav>
+
+</body>
+</html>

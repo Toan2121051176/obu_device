@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-    
-    <!-- Thanh điều hướng chính giữa -->
+    <!-- Thanh điều hướng -->
     <nav class="navbar">
         <div class="nav-left">
             <div class="logo">
@@ -20,7 +19,6 @@
         <div class="nav-center">
             <ul class="nav-list">
                 <li><a href="home.html">🏠 Home</a></li>
-                <li><a href="history.html">📜 Lịch sử chạy</a></li>
                 <li><a href="tax.html">💰 Thuế</a></li>
                 <li><a href="about.html">ℹ️ Giới thiệu</a></li>
             </ul>
@@ -31,63 +29,60 @@
             </div>
         </div>
     </nav>
-    
 
-    
-
+    <!-- Bản đồ -->
     <div id="map"></div>
     
-    <div id="distance-container">
-        <!-- <label for="distanceOutput">Distance:</label>
-        <input id="distanceOutput" type="text" value="0 km" readonly />
-        <label for="Cost">Cost:</label>
-        <input id="Cost" type="text" value="0 VND" readonly />
-         -->
-        <button type="button" id="unsubscribe">Unsubscribe</button>
-        <button type="button" id="showErrors">Show Errors</button>
-        <div id="errorBanner">Error: Something went wrong!</div>
-
-    </div>
+<!-- Thông tin xe / thiết bị -->
     <div id="info-container">
-     <!-- Tìm kiếm thiết bị -->
-     <div class="search-box">
-        <input type="search" id="deviceName" placeholder="Nhập tên thiết bị..." />
-        <button onclick="searchDevice()">🔍</button>
-    </div>
+        <!-- Tìm kiếm thiết bị -->
+        <div class="search-box">
+            <input type="search" id="deviceName" placeholder="Nhập biển số xe..." />
+            <button onclick="searchDevice()">🔍</button>
+        </div>
 
-    <!-- Chọn ngày -->
-    <div class="datePicker">
-        <label for="datePicker">Chọn ngày:</label>
-        <input type="date" id="datePicker">
-    </div>
+        <!-- Chọn ngày -->
+        <div class="datePicker">
+            <label for="datePicker">Chọn ngày:</label>
+            <input type="date" id="datePicker">
+        </div>
 
-    <div id="info-section">
-        <div class="info-row">
-            <span class="info-title">Device:</span>
-            <div class="info-box" id="deviceName">Device1</div>
+        <div id="info-section">
+            <div class="info-row">
+                <span class="info-title">Biển số xe:</span>
+            </div>
+            <div class="info-row">
+                <span class="info-title">Hãng sản xuất :</span>
+            </div>
+            <div class="info-row"> 
+                <span class="info-title">Dòng xe:</span>
+            </div>
+            <div class="info-row">
+                <span class="info-title">Năm sản xuất:</span>
+            </div>
+            <div class="info-row">
+                <span class="info-title">Chủ phương tiện :</span>
+            </div>
         </div>
-        <div class="info-row">
-            <span class="info-title">Coordinates:</span>
-            <div class="info-box" id="coordinatesDisplay">21.1234, 105.1234</div>
-        </div>
-        <div class="info-row">
-            <span class="info-title">Cost:</span>
-            <div class="info-box" id="costDisplay">200 VND</div>
-        </div>
-        <div class="info-row">
-            <span class="info-title">Distance:</span>
-            <div class="info-box" id="distanceDisplay">0 km</div>
-            <!-- <input id="Cost" type="text" value="0 VND" readonly /> -->
-        </div>
-    </div>
-    </div>
-    <div id="errorBox" class="error-box">
-    </div>
+        <!-- Đặt 2 nút xuống dưới -->
+        <div id="buttons-container">
+            <!-- Thanh màu xanh cho nút "Hiển thị lộ trình" -->
+            <div class="button-row green-bar">
+              <button id="btnShowRoute">Hiển thị lộ trình</button>
+            </div>
+        
+            <!-- Thanh màu đỏ cho nút "Dừng Tracking" -->
+            <div class="button-row red-bar">
+              <button id="btnStopTracking">Dừng Tracking</button>
+            </div>
+          </div>
+    </div> <!-- kết thúc #info-container -->
     
     
+
+    <!-- Script -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="app.js"></script>
-    
 </body>
 </html>

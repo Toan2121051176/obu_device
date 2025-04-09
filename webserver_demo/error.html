@@ -6,112 +6,351 @@
     <title>Error Logs</title>
     
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        h1 {
-            color: red;
-            text-align: center;
-            margin: 20px 0;
-        }
-        #errorContainer {
-            flex: 1; /* Đẩy khung chiếm toàn bộ không gian còn lại */
-            margin: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background: #f8f9fa;
-            overflow-y: auto; /* Hiển thị thanh cuộn nếu lỗi quá nhiều */
-            padding: 10px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        li {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            margin-bottom: 5px;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
-        }
-        #clearErrorsButton {
-            position: fixed;
-            bottom: 20px; /* Cách mép dưới 20px */
-            left: 20px;  /* Cách mép trái 20px */
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        #clearErrorsButton:hover {
-            background: #0056b3;
-        }
-        #deviceName {
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-            font-size: 30px; 
-            color: #000000;
-            text-align: left;
-        }
+        /* RESET CƠ BẢN */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f7f9fa; /* Màu nền nhẹ nhàng toàn trang */
+  color: #333;
+}
+
+/* =========================
+   THANH ĐIỀU HƯỚNG (NAVBAR)
+========================= */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #007bff; /* Màu xanh dương cho navbar */
+  padding: 10px 20px;
+  color: white;
+}
+
+.nav-left, .nav-center, .nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.nav-list li a:hover {
+  color: #ffe066; /* vàng nhạt khi hover */
+}
+
+.company-info {
+  position: relative; /* Cho dễ tùy chỉnh nếu cần */
+}
+
+.company-info img.company {
+  height: 40px;
+}
+
+/* =========================
+        BẢN ĐỒ
+========================= */
+#map {
+  margin-top: 10px;
+  margin-left: 10px;
+  width: 70%;
+  height: 100vh; /* Chiều cao toàn màn hình (tùy ý) */
+  border: 5px solid #080404;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* =========================
+      KHUNG THÔNG TIN
+========================= */
+#info-container {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  width: 25%; /* Điều chỉnh theo ý thích */
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 2px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  z-index: 1000;
+  backdrop-filter: blur(5px); /* Hiệu ứng mờ nền (nếu trình duyệt hỗ trợ) */
+}
+
+/* Tìm kiếm thiết bị */
+.search-box {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.search-box input[type="search"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-box button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+  background-color: #0056b3;
+}
+
+/* Date Picker */
+.datePicker {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.datePicker label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.datePicker input[type="date"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Khu vực hiển thị thông tin xe */
+#info-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.info-row {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* =========================
+      PHẦN NÚT BẤM
+========================= */
+#buttons-container {
+  margin-top: 20px; /* Khoảng cách với phần thông tin */
+  display: flex;
+  flex-direction: column;  /* Xếp dọc: nút xanh trên, nút đỏ dưới */
+  gap: 15px;               /* Khoảng cách giữa 2 thanh màu */
+}
+
+/* Mỗi hàng nút */
+.button-row {
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Thanh màu xanh cho nút "Hiển thị lộ trình" */
+.green-bar {
+  background-color: #28a745;
+}
+
+/* Thanh màu đỏ cho nút "Dừng Tracking" */
+.red-bar {
+  background-color: #dc3545;
+}
+
+/* Style cho nút */
+.button-row button {
+  background-color: #fff;         
+  color: #333;                     
+  border: 2px solid transparent; 
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+/* Hiệu ứng hover nút trên thanh xanh */
+.green-bar button:hover {
+  background-color: #218838; /* Xanh đậm hơn */
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+}
+
+/* Hiệu ứng hover nút trên thanh đỏ */
+.red-bar button:hover {
+  background-color: #c82333; /* Đỏ đậm hơn */
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+}
+
+/* =========================
+    PHẦN CÁC NÚT PHỤ & LỖI
+========================= */
+#distance-container {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  z-index: 999;
+}
+
+#distance-container button {
+  background-color: #2980b9;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+#distance-container button:hover {
+  background-color: #1c5980;
+}
+
+#errorBanner {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 1000;
+  display: none; 
+}
+
     </style>
 </head>
 <body>
     
-    <h1>Error Logs</h1>
-    <div class="info-box" id="deviceName">Device1</div>
-    <div id="errorContainer">
-        <ul id="errorList"></ul>
+   <!-- Thanh điều hướng -->
+   <nav class="navbar">
+    <div class="nav-left">
+        <div class="logo">
+            <img src="icon/logo.png" alt="Logo"> 
+            <span class="logo-text">OBU SERVER</span>
+        </div>
     </div>
+    <div class="nav-center">
+        <ul class="nav-list">
+            <li><a href="home.html">🏠 Home</a></li>
+            <li><a href="tax.html">💰 Thuế</a></li>
+            <li><a href="about.html">ℹ️ Giới thiệu</a></li>
+        </ul>
+    </div>
+    <div class="nav-right">
+        <div class="company-info">
+            <img src="icon/company.png" alt="Company" class="company">
+        </div>
+    </div>
+</nav>
+
+<!-- Bản đồ -->
+<div id="map"></div>
+
+<!-- Thông tin xe / thiết bị -->
+<div id="info-container">
+    <!-- Tìm kiếm thiết bị -->
+    <div class="search-box">
+        <input type="search" id="deviceName" placeholder="Nhập tên thiết bị..." />
+        <button onclick="searchDevice()">🔍</button>
+    </div>
+
+    <!-- Chọn ngày -->
+    <div class="datePicker">
+        <label for="datePicker">Chọn ngày:</label>
+        <input type="date" id="datePicker">
+    </div>
+
+    <div id="info-section">
+        <div class="info-row">
+            <span class="info-title">Biển số xe:</span>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Hãng sản xuất :</span>
+        </div>
+        <div class="info-row"> 
+            <span class="info-title">Dòng xe:</span>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Năm sản xuất:</span>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Chủ phương tiên :</span>
+        </div>
+    </div>
+    <!-- Đặt 2 nút xuống dưới -->
+    <div id="buttons-container">
+        <!-- Thanh màu xanh cho nút "Hiển thị lộ trình" -->
+        <div class="button-row green-bar">
+          <button id="btnShowRoute">Hiển thị lộ trình</button>
+        </div>
     
-    <button id="clearErrorsButton">Clear All Errors</button>
+        <!-- Thanh màu đỏ cho nút "Dừng Tracking" -->
+        <div class="button-row red-bar">
+          <button id="btnStopTracking">Dừng Tracking</button>
+        </div>
+      </div>
+</div> <!-- kết thúc #info-container -->
 
-    <script>
-        // Lấy danh sách lỗi từ localStorage
-        const errorLogs = JSON.parse(localStorage.getItem("errorLogs")) || [];
-        const errorList = document.getElementById("errorList");
 
-        // Hiển thị danh sách lỗi trên giao diện
-        function renderErrors(errors) {
-            errorList.innerHTML = ""; // Xóa danh sách hiện tại
-            errors.slice().reverse().forEach((error) => { // Đảo ngược để lỗi mới nhất ở đầu
-                const listItem = document.createElement("li");
-                listItem.textContent = error;
-                errorList.appendChild(listItem);
-            });
-        }
 
-        // Hàm xóa toàn bộ lỗi
-        function clearErrors() {
-            localStorage.removeItem("errorLogs"); // Xóa dữ liệu trong localStorage
-            renderErrors([]); // Làm trống danh sách hiển thị
-        }
-
-        // Gắn sự kiện cho nút "Clear All Errors"
-        document.getElementById("clearErrorsButton").addEventListener("click", clearErrors);
-
-        // Lắng nghe sự kiện storage để cập nhật lỗi mới
-        window.addEventListener("storage", (event) => {
-            if (event.key === "errorLogs") {
-                const updatedErrors = JSON.parse(event.newValue) || [];
-                renderErrors(updatedErrors); // Cập nhật danh sách lỗi
-            }
-        });
-
-        // Hiển thị danh sách lỗi ban đầu
-        renderErrors(errorLogs);
-    </script>
+<!-- Script -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

@@ -1,252 +1,276 @@
+/* ==== IMPORT GOOGLE FONT (vd: Roboto) ==== */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* RESET & CHUNG */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #f7f9fa);
+  color: #333;
+  overflow-x: hidden;
 }
 
-
-
-.company-info {
-    position: fixed;
-    margin-top: 10px;
-    right: 10px; 
+/* ===============================
+   THANH ĐIỀU HƯỚNG (NAVBAR)
+=============================== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  padding: 12px 30px;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-.company {
-    width: 150px; 
-    height: auto; 
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-
-
-.company-logo {
-    position: fixed;
-    right: 20px; 
-    width: 50px; /* Kích thước logo */
-    height: auto; /* Tự động điều chỉnh chiều cao theo tỷ lệ */
+.navbar .logo img {
+  height: 42px;
 }
 
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+}
 
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  font-size: 16px;
+}
 
+.nav-list li a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-list li a:hover {
+  color: #ffe066;
+}
+
+.company-info img.company {
+  height: 42px;
+}
+
+/* ===============================
+          BẢN ĐỒ
+=============================== */
 #map {
-    margin-top: 10px;
-    margin-left: 10px;
-    width: 70%;
-    height: 100%;
-    border: 5px solid #080404;
+  margin: 20px 20px 20px 20px;
+  width: 67%;
+  height: calc(100vh - 88px);
+  border: 5px solid #080404;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
-    .distance-container {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 15px 20px;
-      background-color: #ecf0f1;
-    }
-    .distance-container button {
-      background-color: #2980b9;
-      border: none;
-      color: #fff;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s ease;
-    }
-    .distance-container button:hover {
-      background-color: #1c5980;
-    }
-    /* Hộp chứa thông tin */
- #info-container {
-            position: absolute;
-            top: 60px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 2px solid #ccc;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            font-family: Arial, sans-serif;
-            z-index: 1000;
-            width: 25%; /* Định kích thước hợp lý */
-        }
 
-        /* Ô tìm kiếm */
-        .search-box {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
+/* ===============================
+      KHUNG THÔNG TIN & PANEL
+=============================== */
+#info-container {
+  position: absolute;
+  top: 80px;
+  right: 10px; /* gần map hơn */
+  width: 450px; /* to hơn */
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  padding: 20px 25px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+}
 
-        .search-box input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
 
-        .search-box button {
-            padding: 8px 12px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 5px;
-        }
+/* ==== Ô Tìm Kiếm ==== */
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
 
-        /* Date Picker */
-        .datePicker {
-            margin-bottom: 15px;
-            text-align: center;
-        }
+.search-box input[type="search"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: box-shadow 0.3s ease;
+}
 
-        .datePicker label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
+.search-box input[type="search"]:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+  outline: none;
+}
 
-        .datePicker input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+.search-box button {
+  padding: 8px 14px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
 
-        /* Khu vực hiển thị thông tin */
-        .info-section {
-            margin-top: 10px;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
+.search-box button:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
 
-        .info-section p {
-            margin: 5px 0;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-        }
+/* ==== Date Picker ==== */
+.datePicker {
+  text-align: center;
+  margin-bottom: 15px;
+}
 
-        .info-section strong {
-            color: #333;
-        }
-    #errorBox {
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background-color: rgba(231, 76, 60, 0.9);
-      color: #fff;
-      padding: 10px 15px;
-      max-width: 300px;
-      border-radius: 4px;
-      font-size: 0.9em;
-      overflow-y: auto;
-      max-height: 200px;
-    }
-    .error-message {
-      margin-bottom: 5px;
-    }
-    /* Date Picker */
-    .datePicker {
-            margin-bottom: 15px;
-            text-align: center;
-        }
+.datePicker label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 14px;
+  display: block;
+}
 
-        .datePicker label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
+.datePicker input[type="date"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
 
-        .datePicker input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+/* ==== Phần Thông Tin Xe ==== */
+#info-section {
+  margin-top: 15px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 15px;
+}
 
-        /* Khu vực hiển thị thông tin */
-        .info-section {
-            margin-top: 10px;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
+.info-row {
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.4;
+}
 
-        .info-section p {
-            margin: 5px 0;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-        }
+.info-row:last-child {
+  margin-bottom: 0;
+}
 
-        .info-section strong {
-            color: #333;
-        }
-        #errorBanner {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: red;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            z-index: 1000;
-            display: none; 
-        }
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: blue;
-            padding: 10px 20px;
-            color: white;
-        }
-        
-        .nav-left, .nav-center, .nav-right {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .logo img {
-            height: 40px;
-        }
-        
-        .logo-text {
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .nav-list {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .nav-list li a {
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        .nav-list li a:hover {
-            color: #FFD700; /* vàng nhạt khi hover */
-        }
-        
-        .company-info img.company {
-            height: 40px;
-        }
-        
+/* ===============================
+          PHẦN NÚT BẤM
+=============================== */
+/* Container chứa 2 hàng nút */
+#buttons-container {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Mỗi hàng nút với background gradient mượt */
+.button-row {
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Thanh màu xanh cho nút "Hiển thị lộ trình" */
+.green-bar {
+  background: linear-gradient(135deg, #28a745, #218838);
+}
+
+/* Thanh màu đỏ cho nút "Dừng Tracking" */
+.red-bar {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+/* Style chung cho nút bên trong */
+.button-row button {
+  display: block;
+  width: 100%;  /* Nút bấm chiếm toàn bộ chiều rộng của vùng chứa */
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Gán nền riêng cho nút theo thanh chứa */
+.green-bar button {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: #fff;   /* Bạn có thể thay đổi màu chữ nếu cần */
+}
+
+.red-bar button {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: #fff;
+}
+
+/* Hiệu ứng hover cho cả hai nút */
+.button-row button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* ==== Các thành phần phụ khác ==== */
+#distance-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  z-index: 999;
+}
+
+#distance-container button {
+  background: #2980b9;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#distance-container button:hover {
+  background: #1c5980;
+}
+
+#errorBanner {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  z-index: 1000;
+  display: none; 
+}
+.info-title {
+  font-size: 20px; /* Tăng kích thước chữ, bạn có thể điều chỉnh giá trị này */
+  font-weight: 600;  /* Nếu muốn chữ đậm hơn */
+  color: #333;       /* Màu chữ, tùy theo giao diện */
+}

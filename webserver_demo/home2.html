@@ -7,370 +7,339 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+        /* ==== IMPORT GOOGLE FONT (vd: Roboto) ==== */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* RESET & CHUNG */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Bố cục logo */
-.logo {
-    display: flex; /* Đặt logo và chữ trên cùng một hàng ngang */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: start; /* Căn logo và chữ sang bên trái */
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #f7f9fa);
+  color: #333;
+  overflow-x: hidden;
 }
 
-/* Hình ảnh logo */
-.logo img {         
-    width: 50px; /* Kích thước logo (chiều rộng) */
-    height: auto; /* Chiều cao tự động theo tỉ lệ */
-    margin-right: 10px; /* Khoảng cách giữa logo và chữ */
+/* ===============================
+   THANH ĐIỀU HƯỚNG (NAVBAR)
+=============================== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  padding: 12px 30px;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Văn bản logo */
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar .logo img {
+  height: 42px;
+}
+
 .logo-text {
-    font-size: 24px; /* Kích thước chữ */
-    font-weight: bold; /* In đậm chữ */
-    color: #333; /* Màu chữ */
-    text-align: center; /* Căn giữa chữ trong chính nó */
+  font-size: 22px;
+  font-weight: 700;
 }
 
-
-.company-info {
-    position: fixed;
-    margin-top: 10px;
-    right: 10px; 
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  font-size: 16px;
 }
 
-.company {
-    width: 150px; 
-    height: auto; 
+.nav-list li a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-
-
-.company-logo {
-    position: fixed;
-    right: 20px; 
-    width: 50px; /* Kích thước logo */
-    height: auto; /* Tự động điều chỉnh chiều cao theo tỷ lệ */
+.nav-list li a:hover {
+  color: #ffe066;
 }
 
+.company-info img.company {
+  height: 42px;
+}
 
-
+/* ===============================
+          BẢN ĐỒ
+=============================== */
 #map {
-    margin-top: 10px;
-    margin-left: 10px;
-    width: 70%;
-    height: 100%;
-    border: 5px solid #080404;
+  margin: 20px 20px 20px 20px;
+  width: 65%;
+  height: calc(100vh - 60px);
+  border: 5px solid #080404;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
-#unsubscribe {
-    margin-top: 20px;
-    padding: 30px;
-    font-size: 30px;
-    border: 1px solid #fd7878;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    margin-bottom: 20px; 
-    margin-right: 100px;
-    
+/* ===============================
+      KHUNG THÔNG TIN & PANEL
+=============================== */
+#info-container {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  width: 300px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  padding: 20px 25px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
 }
 
-#unsubscribe:hover {
-    background-color: #dcdcdc; 
+/* ==== Ô Tìm Kiếm ==== */
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
 }
 
-#showErrors {
-    margin-top: 20px;
-    padding: 30px;
-    font-size: 30px;
-    border: 1px solid #fd7878;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    margin-bottom: 20px; 
-    margin-right: 100px;
-    
+.search-box input[type="search"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: box-shadow 0.3s ease;
 }
 
-#showErrors:hover {
-    background-color: #dcdcdc; 
+.search-box input[type="search"]:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+  outline: none;
 }
 
-#unsubscribe:active {
-    background-color: #f5b1b1; /* Màu khi nhấn */
-    border-color: #fd7878; /* Giữ màu viền */
+.search-box button {
+  padding: 8px 14px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.form-row > label {
-    padding: 5em;
-    font-size: 50px;
-    font-weight: bold;
+.search-box button:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* ==== Date Picker ==== */
+.datePicker {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.datePicker label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 14px;
+  display: block;
+}
+
+.datePicker input[type="date"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* ==== Phần Thông Tin Xe ==== */
+#info-section {
+  margin-top: 15px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 15px;
+}
+
+.info-row {
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+/* ===============================
+          PHẦN NÚT BẤM
+=============================== */
+#buttons-container {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Mỗi hàng nút với background gradient mượt */
+.button-row {
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Thanh xanh với hiệu ứng gradient */
+.green-bar {
+  background: linear-gradient(135deg, #28a745, #218838);
+}
+
+/* Thanh đỏ với hiệu ứng gradient */
+.red-bar {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+/* Style cho nút bên trong */
+.button-row button {
+  background: #fff;
+  color: #333;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-row button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* ==== Các thành phần phụ khác ==== */
+#distance-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  z-index: 999;
+}
+
+#distance-container button {
+  background: #2980b9;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#distance-container button:hover {
+  background: #1c5980;
 }
 
 #errorBanner {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    z-index: 1000;
-    display: none; 
-}
- /* Hộp chứa thông tin */
- #info-container {
-            position: absolute;
-            top: 60px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 2px solid #ccc;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            font-family: Arial, sans-serif;
-            z-index: 1000;
-            width: 25%; /* Định kích thước hợp lý */
-        }
-
-        /* Ô tìm kiếm */
-        .search-box {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .search-box button {
-            padding: 8px 12px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        /* Date Picker */
-        .datePicker {
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .datePicker label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .datePicker input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        /* Khu vực hiển thị thông tin */
-        .info-section {
-            margin-top: 10px;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
-
-        .info-section p {
-            margin: 5px 0;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .info-section strong {
-            color: #333;
-        }
-
-
-.info-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 30px; 
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  z-index: 1000;
+  display: none; 
 }
 
-
-.info-title {
-    flex: 0 0 100px; 
-    font-weight: bold;
-    color: #000000;
-    text-align: left;
-    margin-right: 10px;
-}
-
-
-.info-box {
-    flex: 1;
-    padding: 30px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-size: 30px; 
-    color: #000000;
-    text-align: left;
-}
-
-.error-box {
-    position: fixed; /* Đặt vị trí cố định */
-    bottom: 20px; /* Cách đáy trang 20px */
-    right: 20px; /* Cách cạnh phải trang 20px */
-    background-color: #7a7171; /* Màu nền đỏ */
-    color: white; /* Màu chữ trắng */
-    padding: 15px; /* Padding bên trong khung */
-    border-radius: 5px; /* Viền bo tròn */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng cho khung */
-    font-family: Arial, sans-serif;
-    font-size: 16px; /* Kích thước chữ mặc định */
-    width: 300px; /* Chiều rộng cố định cho khung */
-    max-height: 200px; /* Chiều cao tối đa của khung */
-    overflow-y: auto; /* Thêm thanh cuộn dọc khi nội dung quá dài */
-}
-
-.error-message {
-    background-color: #ff5733; /* Màu nền của mỗi ô lỗi */
-    margin-bottom: 10px; /* Khoảng cách giữa các ô lỗi */
-    padding: 10px; /* Khoảng cách trong mỗi ô */
-    border-radius: 5px; /* Viền bo tròn cho mỗi ô */
-    font-size: 14px; /* Kích thước chữ trong từng ô */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng cho mỗi ô */
-}
-
- /* Ô tìm kiếm */
- .search-box {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .search-box button {
-            padding: 8px 12px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        /* Date Picker */
-        .datePicker {
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .datePicker label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .datePicker input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        /* Khu vực hiển thị thông tin */
-        .info-section {
-            margin-top: 10px;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
-
-        .info-section p {
-            margin: 5px 0;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .info-section strong {
-            color: #333;
-        }
     </style>
 </head>
 <body>
 
-    <div class="logo">
-        <img src="icon/logo.png" alt="Logo"> 
-        <span class="logo-text">OBU SERVER</span>
-    </div>
-
-    <div class="company-info">
-        <img src="icon/company.png" alt="Company" class="company">
-    </div>
-
-    <div id="map"></div>
     
-    <div id="distance-container">
-        <!-- <label for="distanceOutput">Distance:</label>
-        <input id="distanceOutput" type="text" value="0 km" readonly />
-        <label for="Cost">Cost:</label>
-        <input id="Cost" type="text" value="0 VND" readonly />
-         -->
-        <button type="button" id="unsubscribe">Show Car Route</button>
-        <!-- <button type="button" id="showErrors">Date</button> -->
-        <button type="button" id="showErrors">Show Toll History</button>
-        <div id="errorBanner">Error: Something went wrong!</div>
 
+ <!-- Thanh điều hướng -->
+ <nav class="navbar">
+    <div class="nav-left">
+        <div class="logo">
+            <img src="icon/logo.png" alt="Logo"> 
+            <span class="logo-text">OBU SERVER</span>
+        </div>
+    </div>
+    <div class="nav-center">
+        <ul class="nav-list">
+            <li><a href="home.html">🏠 Home</a></li>
+            <li><a href="tax.html">💰 Thuế</a></li>
+            <li><a href="about.html">ℹ️ Giới thiệu</a></li>
+        </ul>
+    </div>
+    <div class="nav-right">
+        <div class="company-info">
+            <img src="icon/company.png" alt="Company" class="company">
+        </div>
+    </div>
+</nav>
+
+<!-- Bản đồ -->
+<div id="map"></div>
+
+<!-- Thông tin xe / thiết bị -->
+<div id="info-container">
+    <!-- Tìm kiếm thiết bị -->
+    <div class="search-box">
+        <input type="search" id="deviceName" placeholder="Nhập tên thiết bị..." />
+        <button onclick="searchDevice()">🔍</button>
     </div>
 
+    <!-- Chọn ngày -->
+    <div class="datePicker">
+        <label for="datePicker">Chọn ngày:</label>
+        <input type="date" id="datePicker">
+    </div>
+
+    <div id="info-section">
+        <div class="info-row">
+            <span class="info-title">Biển số xe:</span>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Hãng sản xuất :</span>
+        </div>
+        <div class="info-row"> 
+            <span class="info-title">Dòng xe:</span>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Năm sản xuất:</span>
+        </div>
+        <div class="info-row">
+            <span class="info-title">Chủ phương tiên :</span>
+        </div>
+    </div>
+    <!-- Đặt 2 nút xuống dưới -->
+    <div id="buttons-container">
+        <!-- Thanh màu xanh cho nút "Hiển thị lộ trình" -->
+        <div class="button-row green-bar">
+          <button id="btnShowRoute">Hiển thị lộ trình</button>
+        </div>
     
-    <div id="info-container">
-        <!-- Tìm kiếm thiết bị -->
-        <div class="search-box">
-            <input type="search" id="deviceName" placeholder="Nhập tên thiết bị..." />
-            <button onclick="searchDevice()">🔍</button>
+        <!-- Thanh màu đỏ cho nút "Dừng Tracking" -->
+        <div class="button-row red-bar">
+          <button id="btnStopTracking">Dừng Tracking</button>
         </div>
-
-        <!-- Chọn ngày -->
-        <div class="datePicker">
-            <label for="datePicker">Chọn ngày:</label>
-            <input type="date" id="datePicker">
-        </div>
-
-        <!-- Thông tin chi tiết -->
-        <div class="info-section">
-            <p><strong>Chủ Xe:</strong> <span id="owner">-</span></p>
-            <p><strong>Tọa độ:</strong> <span id="coords">-</span></p>
-            <p><strong>Đường:</strong> <span id="road">-</span></p>
-            <p><strong>Chi phí:</strong> <span id="cost">0</span> VND</p>
-            <p><strong>Tình trạng giao thông:</strong> <span id="traffic">-</span></p>
-            <p><strong>Hiển thị tọa độ:</strong> <span id="coordinatesDisplay">-</span></p>
-            <p><strong>Quãng đường:</strong> <span id="distanceDisplay">-</span></p>
-        </div>
-    </div>
-<div id="errorBox" class="error-box">
-</div>
+      </div>
+</div> <!-- kết thúc #info-container -->
 
     <script>
         let map;
@@ -439,7 +408,7 @@ L.tileLayer('https://mt1.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z
                 map.removeLayer(marker);
             }
             marker = L.marker([lat, lng]).addTo(map)
-                .bindPopup("Vị trí thiết bị")
+                .bindPopup("Điểm bắt đầu")
                 .openPopup();
             map.setView([lat, lng], 15);
         }
