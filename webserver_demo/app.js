@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }).addTo(map);
 
   // Biến toàn cục
-  let coordinatesArray = [];
+  let coordinatesArray = []; 
   let totalDistance = 0;
   let errorLogs = [];
   let cost = 0;
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("errorLogs", JSON.stringify(errorLogs));
       }
     } else {
-      L.marker([lat, lng]).addTo(markersGroup).bindPopup("Start Point").openPopup();
+      L.marker([lat, lng]).addTo(markersGroup).bindPopup("Thiết Bị").openPopup();
     }
 
     const distEl = document.getElementById("distanceDisplay");

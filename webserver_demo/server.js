@@ -12,15 +12,14 @@ const PORT = 3000;
 const mqttBrokerUrl = "wss://broker.emqx.io:8084/mqtt";
 const mqttClient = mqtt.connect(mqttBrokerUrl);
 
-let lastRoadName = "";
 let lastMessage = "";
 let cost = 0;
 let trafficStatuses = [];
 let errorFlag = false;
 let mqttData = [];
 
-const DATA_FILE = "data.json"; // File lưu dữ liệu
-const TIMEOUT_DURATION = 3000; // 3 giây
+const DATA_FILE = "data.json";
+const TIMEOUT_DURATION = 3000;
 let timeout = null;
 let timecheck = true;
 
@@ -29,21 +28,12 @@ app.use(express.json());
 
 mqttClient.on("connect", () => {
     console.log("Connected to MQTT broker");
-    mqttClient.subscribe("elcomOBU/29V180060", () => {
+    mqttClient.subscribe("testelcol", () => {
         console.log("📌 Dữ liệu trước khi ghi vào file:", JSON.stringify(mqttData, null, 2));
-saveDataToFile(mqttData);
-
+        saveDataToFile(mqttData);
         console.log("Subscribed to testelcol topic");
     });
 });
-
-// Hàm loại bỏ dấu tiếng Việt
-function removeDiacritics(str) {
-    return str.normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/đ/g, "d").replace(/Đ/g, "D")
-        .toLowerCase();
-}
 
 // Reset timeout
 function resetTimeout() {
@@ -51,23 +41,7 @@ function resetTimeout() {
     timeout = setTimeout(() => { timecheck = false; }, TIMEOUT_DURATION);
 }
 
-// Hàm lấy tên đường từ OpenStreetMap
-async function getStreetName(lat, lon) {
-    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
-
-    try {
-        const response = await axios.get(url, {
-            headers: { 'User-Agent': 'YourAppName/1.0 (email@example.com)' },
-            timeout: 5000 // Thêm timeout
-        });
-        return response.data.address.road || "Unnamed Road";
-    } catch (error) {
-        console.error("Error fetching street name:", error.message);
-        return "Error fetching road name";
-    }
-}
-
-// Lấy trạng thái giao thông từ TomTom API
+// Hàm lấy trạng thái giao thông từ TomTom API
 const TOMTOM_API_KEY = "an3iZV1eIoJS0UqOK74G6MHIHaGv6ETr";
 
 async function getTrafficStatus(lat, lng) {
@@ -106,23 +80,17 @@ mqttClient.on("message", async (topic, message) => {
         errorFlag = false;
     }
 
-    const roadName = await getStreetName(parseFloat(lat), parseFloat(lng));
-    const road = removeDiacritics(roadName);
-
-    // Cập nhật phí đường
-    if (road !== lastRoadName) {
-        lastRoadName = road;
-        cost += roadCosts[road] || 0;
-        mqttClient.publish("testelcoml", `cost: ${cost}`);
-        console.log(`Updated cost: ${cost}`);
-    }
+    // Bạn có thể tính phí theo toạ độ nếu muốn, ở đây bỏ tính theo tên đường
+    // const road = removeDiacritics(roadName);
+    // if (road !== lastRoadName) { ... } => bỏ luôn phần này nếu không cần
 
     // Lưu dữ liệu mới
     const newData = {
         timestamp: new Date().toISOString(),
         lat: parseFloat(lat),
         lng: parseFloat(lng),
-        road: roadName,
+        // Nếu vẫn cần trường road thì gán mặc định:
+        road: null,
         cost: cost
     };
     mqttData.push(newData);
@@ -133,7 +101,7 @@ mqttClient.on("message", async (topic, message) => {
     if (mqttData.length % 5 === 0) {
         const trafficStatus = await getTrafficStatus(lat, lng);
         if (trafficStatus === "Heavy Traffic") {
-            trafficStatuses.push(roadName);
+            trafficStatuses.push(`(${lat},${lng})`);
         }
         console.log(`Traffic: ${trafficStatus}`);
     }
@@ -142,8 +110,7 @@ mqttClient.on("message", async (topic, message) => {
 // API kiểm tra thông tin gần nhất
 app.get("/api/last-message", (req, res) => {
     res.json({ 
-        message: lastMessage, 
-        road: lastRoadName,
+        message: lastMessage,
         error: errorFlag,
         cost: cost,
         timecheck: timecheck,
@@ -154,7 +121,6 @@ app.get("/api/last-message", (req, res) => {
 // API xoá dữ liệu
 app.delete('/api/clear-data', (req, res) => {
     lastMessage = ""; 
-    lastRoadName = ""; 
     cost = 0;
     trafficStatuses = [];
     console.log('Data cleared');

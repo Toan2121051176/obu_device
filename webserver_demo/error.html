@@ -1,356 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error Logs</title>
-    
-    <style>
-        /* RESET CƠ BẢN */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background-color: #f7f9fa; /* Màu nền nhẹ nhàng toàn trang */
-  color: #333;
-}
-
-/* =========================
-   THANH ĐIỀU HƯỚNG (NAVBAR)
-========================= */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #007bff; /* Màu xanh dương cho navbar */
-  padding: 10px 20px;
-  color: white;
-}
-
-.nav-left, .nav-center, .nav-right {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.logo img {
-  height: 40px;
-}
-
-.logo-text {
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-}
-
-.nav-list {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-list li a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-  font-size: 15px;
-  transition: color 0.3s ease;
-}
-
-.nav-list li a:hover {
-  color: #ffe066; /* vàng nhạt khi hover */
-}
-
-.company-info {
-  position: relative; /* Cho dễ tùy chỉnh nếu cần */
-}
-
-.company-info img.company {
-  height: 40px;
-}
-
-/* =========================
-        BẢN ĐỒ
-========================= */
-#map {
-  margin-top: 10px;
-  margin-left: 10px;
-  width: 70%;
-  height: 100vh; /* Chiều cao toàn màn hình (tùy ý) */
-  border: 5px solid #080404;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-/* =========================
-      KHUNG THÔNG TIN
-========================= */
-#info-container {
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  width: 25%; /* Điều chỉnh theo ý thích */
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 2px solid #ccc;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-  z-index: 1000;
-  backdrop-filter: blur(5px); /* Hiệu ứng mờ nền (nếu trình duyệt hỗ trợ) */
-}
-
-/* Tìm kiếm thiết bị */
-.search-box {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 15px;
-}
-
-.search-box input[type="search"] {
-  flex: 1;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.search-box button {
-  padding: 8px 12px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.search-box button:hover {
-  background-color: #0056b3;
-}
-
-/* Date Picker */
-.datePicker {
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.datePicker label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-.datePicker input[type="date"] {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Khu vực hiển thị thông tin xe */
-#info-section {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
-}
-
-.info-row {
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-/* =========================
-      PHẦN NÚT BẤM
-========================= */
-#buttons-container {
-  margin-top: 20px; /* Khoảng cách với phần thông tin */
-  display: flex;
-  flex-direction: column;  /* Xếp dọc: nút xanh trên, nút đỏ dưới */
-  gap: 15px;               /* Khoảng cách giữa 2 thanh màu */
-}
-
-/* Mỗi hàng nút */
-.button-row {
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-/* Thanh màu xanh cho nút "Hiển thị lộ trình" */
-.green-bar {
-  background-color: #28a745;
-}
-
-/* Thanh màu đỏ cho nút "Dừng Tracking" */
-.red-bar {
-  background-color: #dc3545;
-}
-
-/* Style cho nút */
-.button-row button {
-  background-color: #fff;         
-  color: #333;                     
-  border: 2px solid transparent; 
-  padding: 12px 24px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-/* Hiệu ứng hover nút trên thanh xanh */
-.green-bar button:hover {
-  background-color: #218838; /* Xanh đậm hơn */
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0,0,0,0.2);
-}
-
-/* Hiệu ứng hover nút trên thanh đỏ */
-.red-bar button:hover {
-  background-color: #c82333; /* Đỏ đậm hơn */
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0,0,0,0.2);
-}
-
-/* =========================
-    PHẦN CÁC NÚT PHỤ & LỖI
-========================= */
-#distance-container {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background-color: #fff;
-  padding: 10px 15px;
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  z-index: 999;
-}
-
-#distance-container button {
-  background-color: #2980b9;
-  border: none;
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
-}
-
-#distance-container button:hover {
-  background-color: #1c5980;
-}
-
-#errorBanner {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: red;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  z-index: 1000;
-  display: none; 
-}
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hiển thị Lộ trình</title>
+  <!-- Liên kết tới Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* CSS cơ bản cho trang */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+    }
+    #map {
+      height: 80vh;
+      width: 100%;
+    }
+    #controls {
+      padding: 10px;
+      background: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+    #controls input, #controls button {
+      padding: 8px;
+      font-size: 1rem;
+    }
+  </style>
 </head>
 <body>
-    
-   <!-- Thanh điều hướng -->
-   <nav class="navbar">
-    <div class="nav-left">
-        <div class="logo">
-            <img src="icon/logo.png" alt="Logo"> 
-            <span class="logo-text">OBU SERVER</span>
-        </div>
-    </div>
-    <div class="nav-center">
-        <ul class="nav-list">
-            <li><a href="home.html">🏠 Home</a></li>
-            <li><a href="tax.html">💰 Thuế</a></li>
-            <li><a href="about.html">ℹ️ Giới thiệu</a></li>
-        </ul>
-    </div>
-    <div class="nav-right">
-        <div class="company-info">
-            <img src="icon/company.png" alt="Company" class="company">
-        </div>
-    </div>
-</nav>
+  <!-- Container chứa bản đồ -->
+  <div id="map"></div>
 
-<!-- Bản đồ -->
-<div id="map"></div>
+  <!-- Container chứa các control -->
+  <div id="controls">
+    <input type="date" id="datePicker">
+    <input type="search" id="deviceName" placeholder="Nhập biển số xe...">
+    <button id="btnShowRoute">Hiển thị lộ trình</button>
+    <button id="btnStopTracking">Dừng Tracking</button>
+  </div>
 
-<!-- Thông tin xe / thiết bị -->
-<div id="info-container">
-    <!-- Tìm kiếm thiết bị -->
-    <div class="search-box">
-        <input type="search" id="deviceName" placeholder="Nhập tên thiết bị..." />
-        <button onclick="searchDevice()">🔍</button>
-    </div>
-
-    <!-- Chọn ngày -->
-    <div class="datePicker">
-        <label for="datePicker">Chọn ngày:</label>
-        <input type="date" id="datePicker">
-    </div>
-
-    <div id="info-section">
-        <div class="info-row">
-            <span class="info-title">Biển số xe:</span>
-        </div>
-        <div class="info-row">
-            <span class="info-title">Hãng sản xuất :</span>
-        </div>
-        <div class="info-row"> 
-            <span class="info-title">Dòng xe:</span>
-        </div>
-        <div class="info-row">
-            <span class="info-title">Năm sản xuất:</span>
-        </div>
-        <div class="info-row">
-            <span class="info-title">Chủ phương tiên :</span>
-        </div>
-    </div>
-    <!-- Đặt 2 nút xuống dưới -->
-    <div id="buttons-container">
-        <!-- Thanh màu xanh cho nút "Hiển thị lộ trình" -->
-        <div class="button-row green-bar">
-          <button id="btnShowRoute">Hiển thị lộ trình</button>
-        </div>
-    
-        <!-- Thanh màu đỏ cho nút "Dừng Tracking" -->
-        <div class="button-row red-bar">
-          <button id="btnStopTracking">Dừng Tracking</button>
-        </div>
-      </div>
-</div> <!-- kết thúc #info-container -->
-
-
-
-<!-- Script -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-<script src="app.js"></script>
+  <!-- Liên kết tới Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Nếu có file JS riêng (ví dụ app.js) thì thêm dòng sau -->
+  <!-- <script src="app.js"></script> -->
+  <script>
+    // Ví dụ khởi tạo bản đồ và gán các phần tử id theo yêu cầu
+    document.addEventListener("DOMContentLoaded", () => {
+      // Khởi tạo bản đồ với vị trí mặc định tại Hà Nội
+      const map = L.map('map').setView([21.030034, 105.782190], 13);
+      
+      // Thêm bản đồ cơ bản với tile của Google Maps (hoặc có thể thay thế bằng tile khác)
+      L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&scale=20', {
+        attribution: '&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+      }).addTo(map);
+      
+      // Các biến và logic khác để vẽ marker, polyline...
+      // Ví dụ: Khi nhấn nút "Hiển thị lộ trình"
+      document.getElementById("btnShowRoute").addEventListener("click", () => {
+        // Đây là nơi bạn xử lý gọi API và hiển thị lộ trình
+        // Ví dụ chỉ hiện thông báo:
+        alert("Hiển thị lộ trình sẽ được thực hiện ở đây.");
+      });
+      
+      // Xử lý khi nhấn nút "Dừng Tracking"
+      document.getElementById("btnStopTracking").addEventListener("click", () => {
+        alert("Tracking đã dừng. Xóa dữ liệu hoặc reset bản đồ ở đây.");
+      });
+      
+      // Có thể thêm các đoạn code khác liên quan tới chức năng tìm xe, tính khoảng cách, lỗi GPS,... 
+    });
+  </script>
 </body>
 </html>
