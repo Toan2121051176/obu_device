@@ -49,31 +49,95 @@
   <!-- Nếu có file JS riêng (ví dụ app.js) thì thêm dòng sau -->
   <!-- <script src="app.js"></script> -->
   <script>
-    // Ví dụ khởi tạo bản đồ và gán các phần tử id theo yêu cầu
     document.addEventListener("DOMContentLoaded", () => {
-      // Khởi tạo bản đồ với vị trí mặc định tại Hà Nội
-      const map = L.map('map').setView([21.030034, 105.782190], 13);
-      
-      // Thêm bản đồ cơ bản với tile của Google Maps (hoặc có thể thay thế bằng tile khác)
-      L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&scale=20', {
+      // Khởi tạo bản đồ tại Hà Nội
+      const map = L.map("map").setView([21.030034, 105.782190], 13);
+    
+      // Thêm tile từ Google Maps (chế độ mặc định)
+      L.tileLayer("https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&scale=2", {
         attribution: '&copy; <a href="https://www.google.com/maps">Google Maps</a>'
       }).addTo(map);
-      
-      // Các biến và logic khác để vẽ marker, polyline...
-      // Ví dụ: Khi nhấn nút "Hiển thị lộ trình"
+    
+      let routingControl = null;
+      let deviceMarker = null;
+    
+      // Hàm tracking vị trí thiết bị theo thời gian thực
+      function trackDeviceLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.watchPosition(
+            (position) => {
+              const userLocation = [position.coords.latitude, position.coords.longitude];
+    
+              // Nếu chưa có marker, tạo mới; nếu có rồi thì cập nhật
+              if (!deviceMarker) {
+                deviceMarker = L.marker(userLocation, {
+                  icon: L.icon({
+                    iconUrl: "https://maps.google.com/mapfiles/kml/shapes/man.png",
+                    iconSize: [40, 40]
+                  })
+                }).addTo(map);
+              } else {
+                deviceMarker.setLatLng(userLocation);
+              }
+    
+              map.setView(userLocation, 15);
+            },
+            (error) => {
+              console.error("Lỗi lấy vị trí thiết bị:", error);
+            }
+          );
+        } else {
+          alert("Trình duyệt không hỗ trợ định vị!");
+        }
+      }
+    
+      // Gọi tracking sau khi load trang
+      trackDeviceLocation();
+    
+      // Khi nhấn nút "Hiển thị lộ trình"
       document.getElementById("btnShowRoute").addEventListener("click", () => {
-        // Đây là nơi bạn xử lý gọi API và hiển thị lộ trình
-        // Ví dụ chỉ hiện thông báo:
-        alert("Hiển thị lộ trình sẽ được thực hiện ở đây.");
+        const startInput = document.getElementById("start").value;
+        const endInput = document.getElementById("end").value;
+    
+        if (!startInput || !endInput) {
+          alert("Vui lòng nhập đầy đủ tọa độ điểm bắt đầu và kết thúc!");
+          return;
+        }
+    
+        const start = startInput.split(",").map(Number);
+        const end = endInput.split(",").map(Number);
+    
+        if (start.length !== 2 || end.length !== 2 || start.includes(NaN) || end.includes(NaN)) {
+          alert("Tọa độ không hợp lệ! Vui lòng nhập dạng: 21.03,105.78");
+          return;
+        }
+    
+        const startLatLng = L.latLng(start[0], start[1]);
+        const endLatLng = L.latLng(end[0], end[1]);
+    
+        // Xóa lộ trình cũ nếu có
+        if (routingControl) {
+          map.removeControl(routingControl);
+        }
+    
+        // Hiển thị tuyến đường mới
+        routingControl = L.Routing.control({
+          waypoints: [startLatLng, endLatLng],
+          routeWhileDragging: true
+        }).addTo(map);
       });
-      
-      // Xử lý khi nhấn nút "Dừng Tracking"
+    
+      // Khi nhấn nút "Dừng Tracking"
       document.getElementById("btnStopTracking").addEventListener("click", () => {
-        alert("Tracking đã dừng. Xóa dữ liệu hoặc reset bản đồ ở đây.");
+        if (deviceMarker) {
+          map.removeLayer(deviceMarker);
+          deviceMarker = null;
+        }
+    
+        alert("Đã dừng tracking vị trí thiết bị.");
       });
-      
-      // Có thể thêm các đoạn code khác liên quan tới chức năng tìm xe, tính khoảng cách, lỗi GPS,... 
     });
-  </script>
+    </script>
+    
 </body>
 </html>
